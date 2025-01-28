@@ -6,27 +6,110 @@
     <title>Reproductor de Audio</title>
     <link rel="icon" href="data:,">
     <style>
+        /* Sistema de Diseño */
+        :root {
+            /* Colores */
+            --color-primary: #2D3250;
+            --color-secondary: #424769;
+            --color-accent: #676F9D;
+            --color-light: #F6F6F6;
+            --color-dark: #1A1E33;
+
+            /* Espaciados */
+            --space-xs: 0.5rem;   /* 8px */
+            --space-sm: 1rem;     /* 16px */
+            --space-md: 1.5rem;   /* 24px */
+            --space-lg: 2rem;     /* 32px */
+            --space-xl: 3rem;     /* 48px */
+
+            /* Tipografía */
+            --text-xs: 0.875rem;  /* 14px */
+            --text-sm: 1rem;      /* 16px */
+            --text-md: 1.25rem;   /* 20px */
+            --text-lg: 1.5rem;    /* 24px */
+            --text-xl: 2rem;      /* 32px */
+        }
+
+        /* Reset y estilos base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body { 
-            font-family: system-ui; 
-            margin: 20px;
-            background-color: #f7f7f7;
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: var(--color-light);
+            color: var(--color-dark);
+            line-height: 1.5;
+            padding: var(--space-md);
         }
+
+        /* Layout Grid */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--space-md);
+            padding: var(--space-md);
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .container {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Componentes */
+        h1 {
+            font-size: var(--text-xl);
+            color: var(--color-primary);
+            margin-bottom: var(--space-lg);
+            grid-column: 1 / -1;
+            text-align: center;
+        }
+
         .card { 
-            margin: 20px 0; 
-            padding: 20px;
-            background: #ffffff;
-            border-radius: 8px;
+            background: white;
+            border-radius: var(--space-xs);
+            padding: var(--space-md);
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease;
         }
+
+        .card:hover {
+            transform: translateY(-2px);
+        }
+
+        .audio-title {
+            font-size: var(--text-md);
+            color: var(--color-secondary);
+            margin-bottom: var(--space-sm);
+        }
+
         audio { 
             width: 100%;
-            margin-top: 10px;
+            margin-top: var(--space-sm);
         }
+
+        /* Utilidades */
+        .text-center { text-align: center; }
+        .mb-sm { margin-bottom: var(--space-sm); }
+        .mb-md { margin-bottom: var(--space-md); }
+        .mb-lg { margin-bottom: var(--space-lg); }
     </style>
 </head>
 <body>
-    <h1>Reproductor de Audio</h1>
-    <div id="app">
+    <div class="container">
+        <h1>Reproductor de Audio</h1>
+        
         <div class="card">
             <h3 class="audio-title">Cargando...</h3>
             <audio controls>
@@ -34,6 +117,7 @@
                 Tu navegador no soporta el elemento de audio.
             </audio>
         </div>
+
         <div class="card">
             <h3 class="audio-title">Cargando...</h3>
             <audio controls>
@@ -41,6 +125,7 @@
                 Tu navegador no soporta el elemento de audio.
             </audio>
         </div>
+
         <div class="card">
             <h3 class="audio-title">Cargando...</h3>
             <audio controls>
@@ -48,6 +133,7 @@
                 Tu navegador no soporta el elemento de audio.
             </audio>
         </div>
+
         <div class="card">
             <h3 class="audio-title">Cargando...</h3>
             <audio controls>
@@ -55,6 +141,7 @@
                 Tu navegador no soporta el elemento de audio.
             </audio>
         </div>
+
         <div class="card">
             <h3 class="audio-title">Cargando...</h3>
             <audio controls>
@@ -62,6 +149,7 @@
                 Tu navegador no soporta el elemento de audio.
             </audio>
         </div>
+
         <div class="card">
             <h3 class="audio-title">Cargando...</h3>
             <audio controls>
@@ -73,11 +161,8 @@
 
     <script>
         function extractTitleFromUrl(url) {
-            // Obtener el nombre del archivo de la URL
             const fileName = url.split('/').pop();
-            // Decodificar los caracteres especiales (como %20)
             const decodedFileName = decodeURIComponent(fileName);
-            // Quitar la extensión .mp3
             return decodedFileName.replace('.mp3', '');
         }
 
@@ -96,7 +181,6 @@
             });
         }
 
-        // Actualizar los títulos cuando se carga la página
         updateAudioTitles();
     </script>
 </body>
