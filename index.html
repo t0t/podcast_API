@@ -4,205 +4,100 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reproductor de Audio</title>
-    <link rel="icon" type="image/x-icon" href="data:image/x-icon;,">
+    <link rel="icon" href="data:,">
     <style>
-        :root {
-            --primary-color: #2196f3;
-            --background-color: #f5f5f5;
-            --card-background: #ffffff;
-            --text-color: #333333;
-            --spacing: 1rem;
+        body { 
+            font-family: system-ui; 
+            margin: 20px;
+            background-color: #f7f7f7;
         }
-
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background-color: var(--background-color);
-            color: var(--text-color);
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: var(--spacing);
-        }
-
-        h1 {
-            text-align: center;
-            margin-bottom: calc(var(--spacing) * 2);
-        }
-
-        .audio-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: var(--spacing);
-        }
-
-        .card {
-            background-color: var(--card-background);
+        .card { 
+            margin: 20px 0; 
+            padding: 20px;
+            background: #ffffff;
             border-radius: 8px;
-            padding: var(--spacing);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-
-        .card-title {
-            margin: 0 0 var(--spacing) 0;
-            font-size: 1.2rem;
-            color: var(--primary-color);
-        }
-
-        .audio-player {
+        audio { 
             width: 100%;
-            margin-bottom: var(--spacing);
-        }
-
-        .audio-info {
-            font-size: 0.9rem;
-            color: #666;
-        }
-
-        .loading {
-            text-align: center;
-            padding: calc(var(--spacing) * 2);
-            font-size: 1.2rem;
-        }
-
-        .error {
-            color: #f44336;
-            text-align: center;
-            padding: calc(var(--spacing) * 2);
-            background-color: #ffebee;
-            border-radius: 4px;
-            margin: var(--spacing) 0;
-        }
-
-        .audio-info span {
-            margin-right: 1rem;
-        }
-
-        .created-at {
-            font-size: 0.8rem;
-            color: #888;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Reproductor de Audio</h1>
-        <div id="app">
-            <div class="loading">Cargando audios...</div>
+    <h1>Reproductor de Audio</h1>
+    <div id="app">
+        <div class="card">
+            <h3 class="audio-title">Cargando...</h3>
+            <audio controls>
+                <source src="https://res.cloudinary.com/dec5dv8iy/video/upload/audios/cero%20-%20el%20susurro%20de%20la%20nube.mp3" type="audio/mpeg">
+                Tu navegador no soporta el elemento de audio.
+            </audio>
+        </div>
+        <div class="card">
+            <h3 class="audio-title">Cargando...</h3>
+            <audio controls>
+                <source src="https://res.cloudinary.com/dec5dv8iy/video/upload/v1737964997/audios/Hay%20una%20verdad%20que%20puede%20ser%20conocida.mp3" type="audio/mpeg">
+                Tu navegador no soporta el elemento de audio.
+            </audio>
+        </div>
+        <div class="card">
+            <h3 class="audio-title">Cargando...</h3>
+            <audio controls>
+                <source src="https://res.cloudinary.com/dec5dv8iy/video/upload/v1737964997/audios/Uno%20-%20La%20esencia%20del%20ser.mp3" type="audio/mpeg">
+                Tu navegador no soporta el elemento de audio.
+            </audio>
+        </div>
+        <div class="card">
+            <h3 class="audio-title">Cargando...</h3>
+            <audio controls>
+                <source src="https://res.cloudinary.com/dec5dv8iy/video/upload/v1737964996/audios/tres%20-%20lenguaje%20del%20universo.mp3" type="audio/mpeg">
+                Tu navegador no soporta el elemento de audio.
+            </audio>
+        </div>
+        <div class="card">
+            <h3 class="audio-title">Cargando...</h3>
+            <audio controls>
+                <source src="https://res.cloudinary.com/dec5dv8iy/video/upload/v1737964982/audios/cuatro%20-%20el%20ritmo%20del%20ser.mp3" type="audio/mpeg">
+                Tu navegador no soporta el elemento de audio.
+            </audio>
+        </div>
+        <div class="card">
+            <h3 class="audio-title">Cargando...</h3>
+            <audio controls>
+                <source src="https://res.cloudinary.com/dec5dv8iy/video/upload/v1737964563/audios/Eco%20del%20proceso%20eterno.mp3" type="audio/mpeg">
+                Tu navegador no soporta el elemento de audio.
+            </audio>
         </div>
     </div>
 
     <script>
-        // Configuración de Cloudinary
-        const CLOUDINARY_CONFIG = {
-            cloudName: 'dec5dv8iy',
-            apiKey: '349181619945547'
-        };
-
-        // Utilidades
-        function formatDuration(seconds) {
-            if (!seconds || isNaN(seconds)) return '0:00';
-            const minutes = Math.floor(seconds / 60);
-            const remainingSeconds = Math.floor(seconds % 60);
-            return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+        function extractTitleFromUrl(url) {
+            // Obtener el nombre del archivo de la URL
+            const fileName = url.split('/').pop();
+            // Decodificar los caracteres especiales (como %20)
+            const decodedFileName = decodeURIComponent(fileName);
+            // Quitar la extensión .mp3
+            return decodedFileName.replace('.mp3', '');
         }
 
-        function formatBytes(bytes) {
-            return (bytes / 1024 / 1024).toFixed(2) + ' MB';
-        }
-
-        function formatDate(dateString) {
-            return new Date(dateString).toLocaleDateString('es-ES', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
+        function updateAudioTitles() {
+            const audioElements = document.querySelectorAll('audio');
+            
+            audioElements.forEach(audio => {
+                const source = audio.querySelector('source');
+                if (source) {
+                    const title = extractTitleFromUrl(source.src);
+                    const titleElement = audio.parentElement.querySelector('.audio-title');
+                    if (titleElement) {
+                        titleElement.textContent = title;
+                    }
+                }
             });
         }
 
-        // Clase principal
-        class AudioPlayer {
-            constructor(containerId) {
-                const element = document.getElementById(containerId);
-                if (!element) throw new Error(`Container with id ${containerId} not found`);
-                this.container = element;
-                this.init();
-            }
-
-            async init() {
-                try {
-                    const audios = await this.fetchAudios();
-                    this.render(audios);
-                } catch (error) {
-                    this.renderError(error instanceof Error ? error.message : 'Error al cargar los audios');
-                }
-            }
-
-            async fetchAudios() {
-                const API_URL = window.location.hostname === 'localhost' 
-                    ? 'http://localhost:3001/api/audios'
-                    : 'https://tu-servidor-de-produccion.com/api/audios';
-
-                const url = API_URL;
-                const response = await fetch(url);
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                const data = await response.json();
-                return data.map(resource => ({
-                    url: resource.secure_url,
-                    title: resource.public_id.split('/').pop(),
-                    format: resource.format,
-                    duration: resource.duration,
-                    bytes: resource.bytes,
-                    created_at: resource.created_at
-                }));
-            }
-
-            createAudioCard(audio) {
-                return `
-                    <div class="card">
-                        <h3 class="card-title">${audio.title}</h3>
-                        <audio controls class="audio-player">
-                            <source src="${audio.url}" type="audio/${audio.format}">
-                            Tu navegador no soporta el elemento de audio.
-                        </audio>
-                        <div class="audio-info">
-                            <span>Tamaño: ${formatBytes(audio.bytes)}</span>
-                            ${audio.duration ? `<span>Duración: ${formatDuration(audio.duration)}</span>` : ''}
-                        </div>
-                        <div class="created-at">
-                            Subido: ${formatDate(audio.created_at)}
-                        </div>
-                    </div>
-                `;
-            }
-
-            render(audios) {
-                this.container.innerHTML = `
-                    <div class="audio-grid">
-                        ${audios.map(audio => this.createAudioCard(audio)).join('')}
-                    </div>
-                `;
-            }
-
-            renderError(message) {
-                this.container.innerHTML = `
-                    <div class="error">
-                        ${message}
-                    </div>
-                `;
-            }
-        }
-
-        // Inicializar la aplicación cuando el DOM esté listo
-        document.addEventListener('DOMContentLoaded', () => {
-            new AudioPlayer('app');
-        });
+        // Actualizar los títulos cuando se carga la página
+        updateAudioTitles();
     </script>
 </body>
 </html>
