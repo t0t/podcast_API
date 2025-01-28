@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reproductor de Audio</title>
+    <link rel="icon" type="image/x-icon" href="data:image/x-icon;,">
+    <style>
+        :root {
+            --primary-color: #2196f3;
+            --background-color: #f5f5f5;
+            --card-background: #ffffff;
+            --text-color: #333333;
+            --spacing: 1rem;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--spacing);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: calc(var(--spacing) * 2);
+        }
+
+        .audio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--spacing);
+        }
+
+        .card {
+            background-color: var(--card-background);
+            border-radius: 8px;
+            padding: var(--spacing);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-title {
+            margin: 0 0 var(--spacing) 0;
+            font-size: 1.2rem;
+            color: var(--primary-color);
+        }
+
+        .audio-player {
+            width: 100%;
+            margin-bottom: var(--spacing);
+        }
+
+        .audio-info {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .loading {
+            text-align: center;
+            padding: calc(var(--spacing) * 2);
+            font-size: 1.2rem;
+        }
+
+        .error {
+            color: #f44336;
+            text-align: center;
+            padding: calc(var(--spacing) * 2);
+            background-color: #ffebee;
+            border-radius: 4px;
+            margin: var(--spacing) 0;
+        }
+
+        .audio-info span {
+            margin-right: 1rem;
+        }
+
+        .created-at {
+            font-size: 0.8rem;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Reproductor de Audio</h1>
+        <div id="app">
+            <div class="loading">Cargando audios...</div>
+        </div>
+    </div>
+
+    <script>
+        // Configuración de Cloudinary
+        const CLOUDINARY_CONFIG = {
+            cloudName: 'dec5dv8iy',
+            apiKey: '349181619945547'
+        };
+
+        // Utilidades
+        function formatDuration(seconds) {
+            if (!seconds || isNaN(seconds)) return '0:00';
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = Math.floor(seconds % 60);
+            return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+        }
+
+        function formatBytes(bytes) {
+            return (bytes / 1024 / 1024).toFixed(2) + ' MB';
+        }
+
+        function formatDate(dateString) {
+            return new Date(dateString).toLocaleDateString('es-ES', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+
+        // Clase principal
+        class AudioPlayer {
+            constructor(containerId) {
+                const element = document.getElementById(containerId);
+                if (!element) throw new Error(`Container with id ${containerId} not found`);
+                this.container = element;
+                this.init();
+            }
+
+            async init() {
+                try {
+                    const audios = await this.fetchAudios();
+                    this.render(audios);
+                } catch (error) {
+                    this.renderError(error instanceof Error ? error.message : 'Error al cargar los audios');
+                }
+            }
+
+            async fetchAudios() {
+                const url = `http://localhost:3001/api/audios`;
+                const response = await fetch(url);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                return data.map(resource => ({
+                    url: resource.secure_url,
+                    title: resource.public_id.split('/').pop(),
+                    format: resource.format,
+                    duration: resource.duration,
+                    bytes: resource.bytes,
+                    created_at: resource.created_at
+                }));
+            }
+
+            createAudioCard(audio) {
+                return `
+                    <div class="card">
+                        <h3 class="card-title">${audio.title}</h3>
+                        <audio controls class="audio-player">
+                            <source src="${audio.url}" type="audio/${audio.format}">
+                            Tu navegador no soporta el elemento de audio.
+                        </audio>
+                        <div class="audio-info">
+                            <span>Tamaño: ${formatBytes(audio.bytes)}</span>
+                            ${audio.duration ? `<span>Duración: ${formatDuration(audio.duration)}</span>` : ''}
+                        </div>
+                        <div class="created-at">
+                            Subido: ${formatDate(audio.created_at)}
+                        </div>
+                    </div>
+                `;
+            }
+
+            render(audios) {
+                this.container.innerHTML = `
+                    <div class="audio-grid">
+                        ${audios.map(audio => this.createAudioCard(audio)).join('')}
+                    </div>
+                `;
+            }
+
+            renderError(message) {
+                this.container.innerHTML = `
+                    <div class="error">
+                        ${message}
+                    </div>
+                `;
+            }
+        }
+
+        // Inicializar la aplicación cuando el DOM esté listo
+        document.addEventListener('DOMContentLoaded', () => {
+            new AudioPlayer('app');
+        });
+    </script>
+</body>
+</html>

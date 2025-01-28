@@ -1,76 +1,122 @@
-# Getting Started with Create React App
+# Podcast Player
 
-REACT_APP_CLOUDINARY_CLOUD_NAME=dec5dv8iy
-REACT_APP_CLOUDINARY_API_KEY=371369729516137
-CLOUDINARY_API_SECRET=yBoXJ2DOIgX2cuX4_k126SWSOSA
-REACT_APP_CLOUDINARY_UPLOAD_PRESET=ml_default
+Reproductor de audio moderno construido con TypeScript y JavaScript vanilla, utilizando Cloudinary para el almacenamiento y gestión de archivos de audio.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Características
 
-## Available Scripts
+- Reproductor de audio con interfaz moderna
+- Diseño responsive
+- Rendimiento optimizado
+- TypeScript para mejor mantenibilidad
+- Estilos modernos con CSS variables
+- Hot reload en desarrollo
+- Despliegue fácil a GitHub Pages
 
-In the project directory, you can run:
+## Tecnologías
 
-### `npm start`
+- TypeScript
+- Vite
+- Node.js + Express (API)
+- Cloudinary
+- CSS moderno
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Requisitos Previos
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- Node.js (versión 14 o superior)
+- Cuenta en Cloudinary
 
-### `npm test`
+## Configuración
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. Clona el repositorio:
+```bash
+git clone [URL_DEL_REPOSITORIO]
+cd podcast_API
+```
 
-### `npm run build`
+2. Instala las dependencias:
+```bash
+npm install
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+3. Configura las variables de entorno:
+   - Crea un archivo `.env` en la raíz del proyecto
+   - Añade las siguientes variables:
+```env
+REACT_APP_CLOUDINARY_CLOUD_NAME=tu_cloud_name
+REACT_APP_CLOUDINARY_API_KEY=tu_api_key
+CLOUDINARY_API_SECRET=tu_api_secret
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Desarrollo
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Para iniciar el entorno de desarrollo (API + cliente):
+```bash
+npm run dev
+```
 
-### `npm run eject`
+Esto iniciará:
+- API en http://localhost:3000
+- Cliente en http://localhost:5173
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Scripts disponibles:
+- `npm run dev` - Inicia API y cliente en modo desarrollo
+- `npm run dev:api` - Inicia solo la API
+- `npm run dev:client` - Inicia solo el cliente
+- `npm run build` - Construye el proyecto para producción
+- `npm run preview` - Previsualiza la build de producción
+- `npm run deploy` - Despliega a GitHub Pages
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Estructura del Proyecto
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```
+podcast_API/
+├── src/
+│   ├── main.ts         # Punto de entrada principal
+│   ├── api.ts          # Funciones para llamadas a la API
+│   ├── types.ts        # Interfaces y tipos TypeScript
+│   ├── utils.ts        # Funciones de utilidad
+│   └── style.css       # Estilos CSS
+├── server.js           # Servidor API
+├── index.html          # HTML principal
+└── [archivos de configuración]
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Despliegue
 
-## Learn More
+### GitHub Pages
+```bash
+npm run deploy
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Netlify Drop
+1. Ejecuta `npm run build`
+2. Arrastra la carpeta `dist` a https://app.netlify.com/drop
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## API Endpoints
 
-### Code Splitting
+### GET /api/audios
+Retorna la lista de archivos de audio disponibles.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Respuesta:
+```typescript
+interface Audio {
+    url: string;
+    title: string;
+    format: string;
+    duration?: number;
+    bytes: number;
+    created_at: string;
+}
+```
 
-### Analyzing the Bundle Size
+## Contribuir
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+1. Fork el proyecto
+2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abre un Pull Request
 
-### Making a Progressive Web App
+## Licencia
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-# podcast_API
+Este proyecto está bajo la Licencia ISC. Ver el archivo `LICENSE` para más detalles.
