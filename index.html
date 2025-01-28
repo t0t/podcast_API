@@ -4,59 +4,100 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reproductor de Audio</title>
+    <link rel="icon" href="data:,">
     <style>
-        body { font-family: system-ui; margin: 20px; }
-        .card { margin: 20px 0; padding: 10px; background: #f5f5f5; }
-        audio { width: 100%; }
+        body { 
+            font-family: system-ui; 
+            margin: 20px;
+            background-color: #f7f7f7;
+        }
+        .card { 
+            margin: 20px 0; 
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        audio { 
+            width: 100%;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
     <h1>Reproductor de Audio</h1>
-    <div id="app">Cargando...</div>
+    <div id="app">
+        <div class="card">
+            <h3 class="audio-title">Cargando...</h3>
+            <audio controls>
+                <source src="https://res.cloudinary.com/dec5dv8iy/video/upload/audios/cero%20-%20el%20susurro%20de%20la%20nube.mp3" type="audio/mpeg">
+                Tu navegador no soporta el elemento de audio.
+            </audio>
+        </div>
+        <div class="card">
+            <h3 class="audio-title">Cargando...</h3>
+            <audio controls>
+                <source src="https://res.cloudinary.com/dec5dv8iy/video/upload/v1737964997/audios/Hay%20una%20verdad%20que%20puede%20ser%20conocida.mp3" type="audio/mpeg">
+                Tu navegador no soporta el elemento de audio.
+            </audio>
+        </div>
+        <div class="card">
+            <h3 class="audio-title">Cargando...</h3>
+            <audio controls>
+                <source src="https://res.cloudinary.com/dec5dv8iy/video/upload/v1737964997/audios/Uno%20-%20La%20esencia%20del%20ser.mp3" type="audio/mpeg">
+                Tu navegador no soporta el elemento de audio.
+            </audio>
+        </div>
+        <div class="card">
+            <h3 class="audio-title">Cargando...</h3>
+            <audio controls>
+                <source src="https://res.cloudinary.com/dec5dv8iy/video/upload/v1737964996/audios/tres%20-%20lenguaje%20del%20universo.mp3" type="audio/mpeg">
+                Tu navegador no soporta el elemento de audio.
+            </audio>
+        </div>
+        <div class="card">
+            <h3 class="audio-title">Cargando...</h3>
+            <audio controls>
+                <source src="https://res.cloudinary.com/dec5dv8iy/video/upload/v1737964982/audios/cuatro%20-%20el%20ritmo%20del%20ser.mp3" type="audio/mpeg">
+                Tu navegador no soporta el elemento de audio.
+            </audio>
+        </div>
+        <div class="card">
+            <h3 class="audio-title">Cargando...</h3>
+            <audio controls>
+                <source src="https://res.cloudinary.com/dec5dv8iy/video/upload/v1737964563/audios/Eco%20del%20proceso%20eterno.mp3" type="audio/mpeg">
+                Tu navegador no soporta el elemento de audio.
+            </audio>
+        </div>
+    </div>
 
     <script>
-        const CLOUDINARY_CONFIG = {
-            cloudName: 'dec5dv8iy',
-            apiKey: '349181619945547'
-        };
-
-        async function loadAudios() {
-            try {
-                const url = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CONFIG.cloudName}/resources/video`;
-                const params = new URLSearchParams({
-                    type: 'upload',
-                    prefix: 'audios/',
-                    resource_type: 'video'
-                });
-
-                const response = await fetch(`${url}?${params}`, {
-                    headers: {
-                        'Authorization': 'Basic ' + btoa(`${CLOUDINARY_CONFIG.apiKey}:`)
-                    }
-                });
-
-                if (!response.ok) {
-                    throw new Error(`Error: ${response.status}`);
-                }
-
-                const data = await response.json();
-                
-                document.getElementById('app').innerHTML = data.resources
-                    .map(audio => `
-                        <div class="card">
-                            <h3>${audio.public_id.split('/').pop()}</h3>
-                            <audio controls>
-                                <source src="${audio.secure_url}" type="audio/${audio.format}">
-                            </audio>
-                        </div>
-                    `)
-                    .join('');
-            } catch (error) {
-                document.getElementById('app').innerHTML = `<p>Error: ${error.message}</p>`;
-            }
+        function extractTitleFromUrl(url) {
+            // Obtener el nombre del archivo de la URL
+            const fileName = url.split('/').pop();
+            // Decodificar los caracteres especiales (como %20)
+            const decodedFileName = decodeURIComponent(fileName);
+            // Quitar la extensión .mp3
+            return decodedFileName.replace('.mp3', '');
         }
 
-        loadAudios();
+        function updateAudioTitles() {
+            const audioElements = document.querySelectorAll('audio');
+            
+            audioElements.forEach(audio => {
+                const source = audio.querySelector('source');
+                if (source) {
+                    const title = extractTitleFromUrl(source.src);
+                    const titleElement = audio.parentElement.querySelector('.audio-title');
+                    if (titleElement) {
+                        titleElement.textContent = title;
+                    }
+                }
+            });
+        }
+
+        // Actualizar los títulos cuando se carga la página
+        updateAudioTitles();
     </script>
 </body>
 </html>
