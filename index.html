@@ -141,7 +141,11 @@
             }
 
             async fetchAudios() {
-                const url = `http://localhost:3001/api/audios`;
+                const API_URL = window.location.hostname === 'localhost' 
+                    ? 'http://localhost:3001/api/audios'
+                    : 'https://tu-servidor-de-produccion.com/api/audios';
+
+                const url = API_URL;
                 const response = await fetch(url);
 
                 if (!response.ok) {

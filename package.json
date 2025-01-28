@@ -1,5 +1,5 @@
 {
-  "name": "podcast-player",
+  "name": "podcast-api",
   "version": "1.0.0",
   "description": "Reproductor de audio con Cloudinary",
   "type": "module",
@@ -12,7 +12,9 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "deploy": "npm run build && gh-pages -d dist",
-    "install:gh-pages": "npm install --save-dev gh-pages"
+    "install:gh-pages": "npm install --save-dev gh-pages",
+    "predeploy": "npm run build",
+    "deploy-gh-pages": "gh-pages -d dist"
   },
   "dependencies": {
     "cloudinary": "^1.41.0",
